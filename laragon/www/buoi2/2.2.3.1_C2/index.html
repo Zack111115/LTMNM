@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Minh họa AJAX Fetch - Laragon</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 30px; }
+        .form-container { background: #f9f9f9; padding: 20px; border-radius: 8px; max-width: 400px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        .input-group { margin-bottom: 15px; }
+        .input-group label { display: block; margin-bottom: 5px; font-weight: bold; }
+        .input-group input { width: 95%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
+        button { background: #007bff; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        #result-box { margin-top: 20px; padding: 15px; border-left: 5px solid #28a745; background: #e8f5e9; display: none; }
+    </style>
+</head>
+<body>
+
+    <h2>Cách 2: Minh họa gửi dữ liệu bằng AJAX Fetch</h2>
+    <p><i>Hãy chú ý vòng tròn tải lại trang của trình duyệt, nó sẽ không hề xoay khi bấm nút!</i></p>
+
+    <div class="form-container">
+        <!-- Form này không có thuộc tính action hay method vì ta sẽ xử lý bằng JS -->
+        <form id="kvForm">
+            <div class="input-group">
+                <label for="name">Họ và tên:</label>
+                <input type="text" id="name" value="Nam" required>
+            </div>
+            <div class="input-group">
+                <label for="age">Tuổi:</label>
+                <input type="number" id="age" value="20" required>
+            </div>
+            <button type="submit">Gửi dữ liệu qua AJAX</button>
+        </form>
+
+        <!-- Nơi hiển thị kết quả trả về từ PHP ngầm -->
+        <div id="result-box">
+            <strong>Phản hồi từ Server:</strong>
+            <p id="php-response"></p>
+        </div>
+    </div>
+
+    <script>
+    document.getElementById('kvForm').addEventListener('submit', function(e) {
+        e.preventDefault(); // CHẶN KHÔNG CHO FORM TẢI LẠI TRANG
+
+        // Lấy dữ liệu từ các ô input do người dùng nhập
+        const inputName = document.getElementById('name').value;
+        const inputAge = document.getElementById('age').value;
+
+        // Chuẩn bị chuỗi body y hệt định dạng trong ảnh tài liệu (name=Nam&age=20)
+        // Dùng encodeURIComponent để tránh lỗi khi nhập tiếng Việt có dấu hoặc ký tự đặc biệt
+        const requestBody = `name=${encodeURIComponent(inputName)}&age=${encodeURIComponent(inputAge)}`;
+
+        // Thực hiện Fetch API gửi ngầm sang process.php
+        fetch("process.php", {
+            method: "POST",
+            headers: { 
+                "Content-Type": "application/x-www-form-urlencoded" 
+            },
+            body: requestBody
+        })
+        .then(res => res.text()) // Chuyển đổi phản hồi từ server thành dạng văn bản (Text)
+        .then(data => {
+            // 1. In ra Console giống hệt yêu cầu trong ảnh tài liệu
+            console.log("Phản hồi từ server:", data);
+
+            // 2. Hiển thị trực tiếp kết quả lên giao diện web cho trực quan
+            const resultBox = document.getElementById('result-box');
+            const phpResponse = document.getElementById('php-response');
+            
+            phpResponse.innerText = data;
+            resultBox.style.display = 'block'; // Hiện hộp kết quả
+        })
+        .catch(error => {
+            console.error("Đã xảy ra lỗi kết nối:", error);
+        });
+    });
+    </script>
+
+</body>
+</html>

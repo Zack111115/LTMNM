@@ -1,0 +1,2 @@
+[07-Jul-2026 12:30:09 UTC] PHP Warning:  move_uploaded_file(uploads/1783427409_637390902_1369538464975051_6795018653815054258_n.jpg): Failed to open stream: No such file or directory in C:\laragon\www\myproject\bai15\upload.php on line 8
+[07-Jul-2026 12:30:09 UTC] PHP Warning:  move_uploaded_file(): Unable to move &quot;C:\Users\TN.Trung Kiên\AppData\Local\Temp\php2070.tmp&quot; to &quot;uploads/1783427409_637390902_1369538464975051_6795018653815054258_n.jpg&quot; in C:\laragon\www\myproject\bai15\upload.php on line 8
