@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tỷ giá ngoại tệ</title>
+</head>
+<body>
+    <h2>Bảng tỷ giá ngoại tệ</h2>
+    <p>Cập nhật lần cuối: <span id="last-update">Đang tải...</span></p>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Ngoại tệ</th>
+                <th>Mua tiền mặt</th>
+                <th>Bán tiền mặt</th>
+            </tr>
+        </thead>
+        <tbody id="rate-data"></tbody>
+    </table>
+
+    <script>
+        function loadRates() {
+            fetch('rates.php')
+                .then(res => res.json())
+                .then(data => {
+                    document.getElementById("last-update").innerText = data.time;
+                    let html = "";
+                    data.rates.forEach(rate => {
+                        html += `<tr>
+                                    <td>${rate.currency}</td>
+                                    <td>${rate.buy}</td>
+                                    <td>${rate.sell}</td>
+                                 </tr>`;
+                    });
+                    document.getElementById("rate-data").innerHTML = html;
+                });
+        }
+
+        loadRates();
+        setInterval(loadRates, 600000); // 10 phút = 600000 ms
+    </script>
+</body>
+</html>

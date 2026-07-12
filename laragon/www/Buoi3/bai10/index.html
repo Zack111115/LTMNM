@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>To-do List</title>
+</head>
+<body>
+    <h2>Danh sách công việc</h2>
+    <input type="text" id="task" placeholder="Nhập công việc">
+    <button onclick="addTask()">Thêm</button>
+    <ul id="list"></ul>
+
+    <script>
+        let todos = [];
+
+        function loadTodos() {
+            fetch('todo.php')
+                .then(res => res.json())
+                .then(data => {
+                    todos = data;
+                    render();
+                });
+        }
+
+        function saveTodos() {
+            let formData = new FormData();
+            formData.append('data', JSON.stringify(todos));
+            
+            fetch('todo.php', {
+                method: 'POST',
+                body: formData
+            });
+        }
+
+        function addTask() {
+            let input = document.getElementById("task");
+            if (input.value.trim() !== "") {
+                todos.push({ text: input.value, completed: false });
+                input.value = "";
+                saveTodos();
+                render();
+            }
+        }
+
+        function toggleTask(index) {
+            todos[index].completed = !todos[index].completed;
+            saveTodos();
+            render();
+        }
+
+        function deleteTask(index) {
+            todos.splice(index, 1);
+            saveTodos();
+            render();
+        }
+
+        function render() {
+            let html = "";
+            todos.forEach((todo, index) => {
+                // Kiểm tra trạng thái để đổi màu chữ và tên nút bấm
+                let style = todo.completed ? "text-decoration: line-through; color: gray;" : "";
+                let btnText = todo.completed ? "Bỏ hoàn thành" : "Hoàn thành";
+                
+                // Nối chuỗi HTML để tạo giao diện
+                html += `<li style="${style}">
+                    <span>${todo.text}</span>
+                    <button onclick="toggleTask(${index})">${btnText}</button>
+                    <button onclick="deleteTask(${index})">Xóa</button>
+                </li>`;
+            });
+            // Đẩy giao diện mới vào thẻ <ul>
+            document.getElementById("list").innerHTML = html;
+        }
+
+        loadTodos();
+    </script>
+</body>
+</html>
