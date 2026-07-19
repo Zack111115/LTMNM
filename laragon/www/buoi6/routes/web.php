@@ -18,3 +18,13 @@ return (int)$a + (int)$b;
 
 use App\Http\Controllers\StudentController;
 Route::get('/students', [StudentController::class, 'index']);
+
+Route::get('/students/db', [StudentController::class, 'indexDb']);
+
+Route::get('/students/combined', [StudentController::class, 'combined']);
+
+use App\Http\Controllers\PageController;
+Route::get('/about', [PageController::class, 'about']);
+
+Route::get('/students/create', [StudentController::class, 'create']);
+Route::post('/students', [StudentController::class, 'store']);
